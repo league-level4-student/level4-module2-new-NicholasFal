@@ -3,7 +3,12 @@ package _06_Console_Store;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import _02_Generics_Store.Candy;
 import _02_Generics_Store.Cart;
+import _02_Generics_Store.CartF;
+import _02_Generics_Store.Cereal;
+import _02_Generics_Store.Clothing;
+import _02_Generics_Store.Toy;
 
 public class ConsoleStore {
 
@@ -43,11 +48,14 @@ public class ConsoleStore {
 	Cart cart = new Cart();
 	static Scanner scan = new Scanner(System.in);
 	static ArrayList<String> items = new ArrayList<String>();
+	 static String name;
     public static void main(String[] args) {
     	int money = 100;
     	
     	System.out.println("You currently have " + money + " dollars");
     	String choice;
+    	System.out.println("Name: ");
+    	name = scan.nextLine();
     	do {
     	System.out.println("Would you like to add an item, remove an item, view items, or check out your cart? (add, remove, view, check out)");
     	choice = scan.nextLine(); 
@@ -95,22 +103,90 @@ public class ConsoleStore {
     	}
     }
     public static void checkOut() {
+    	int price = countPrice();
+    	if(price < 100) {
+    		System.out.println("Name: " + name);
     	
+    	int clothingP = 35;
+    	int candyP = 1;
+    	int toyP = 15;
+    	int cerealP = 5;
+    	for(int i = 0; i < items.size(); i++) {
+    		if(items.get(i).equalsIgnoreCase("Clothing")) {
+    		System.out.println(items.get(i) + " - $" + clothingP );
+    		} else if(items.get(i).equalsIgnoreCase("Candy")) {
+        		System.out.println(items.get(i) + " - $" + candyP );
+    		} else if(items.get(i).equalsIgnoreCase("Toy")) {
+        		System.out.println(items.get(i) + " - $" + toyP );
+    		} else if(items.get(i).equalsIgnoreCase("Cereal")) {
+        		System.out.println(items.get(i) + " - $" + cerealP );
+    		}
+    	}
+    	System.out.println("Total: " + price);
+    	showItems();
+    	} else {
+    		do {
+    		price = countPrice();
+    		System.out.println("Your total is " + price + ". You do not have enough money to pay for this, please remove an item.");
+    		removeItems();
+    		price = countPrice();
+    		} while(price > 100);
+    		int clothingP = 35;
+        	int candyP = 1;
+        	int toyP = 15;
+        	int cerealP = 5;
+        	for(int i = 0; i < items.size(); i++) {
+        		if(items.get(i).equalsIgnoreCase("Clothing")) {
+        		System.out.println(items.get(i) + " - $" + clothingP );
+        		} else if(items.get(i).equalsIgnoreCase("Candy")) {
+            		System.out.println(items.get(i) + " - $" + candyP );
+        		} else if(items.get(i).equalsIgnoreCase("Toy")) {
+            		System.out.println(items.get(i) + " - $" + toyP );
+        		} else if(items.get(i).equalsIgnoreCase("Cereal")) {
+            		System.out.println(items.get(i) + " - $" + cerealP );
+        		}
+        	}
+        	System.out.println("Total: " + price);
+    		showItems();
+    	}
     }
     public static int countPrice() {
     	int price = 0;
     	for(int i = 0; i < items.size(); i++) {
-    		if(items.get(i).equals("Candy")) {
+    		if(items.get(i).equalsIgnoreCase("Candy")) {
     			price+=1;
-    		} else if(items.get(i).equals("Cereal")) {
+    		} else if(items.get(i).equalsIgnoreCase("Cereal")) {
     			price+=5;
-    		} else if(items.get(i).equals("Clothing")) {
+    		} else if(items.get(i).equalsIgnoreCase("Clothing")) {
     			price+=35;
-    		} else if(items.get(i).equals("Toy")) {
+    		} else if(items.get(i).equalsIgnoreCase("Toy")) {
     			price+=15;
     		}
     	}
-    	return 0;
+    	
+    	return price;
+    }
+    public static void showItems() {
+    	Cart<Clothing> clothing = new Cart();
+		Cart<Toy> toys = new Cart();
+		CartF<Cereal> cereal = new CartF();
+		CartF<Candy> candy = new CartF();
+		for(int i = 0; i < items.size(); i++) {
+			if(items.get(i).equalsIgnoreCase("clothing")) {
+				clothing.add(new Clothing());
+			} else if(items.get(i).equalsIgnoreCase("toy")) {
+				toys.add(new Toy());
+			} else if(items.get(i).equalsIgnoreCase("cereal")) {
+				cereal.add(new Cereal());
+			} else if(items.get(i).equalsIgnoreCase("candy")) {
+				candy.add(new Candy());
+			}
+		}
+		clothing.showCart();
+		toys.showCart();
+		cereal.showCart();
+		candy.showCart();
+
     }
 
 }
